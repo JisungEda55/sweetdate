@@ -48,7 +48,7 @@
     var dDayList = [
         { date: new Date('2024-11-14T00:00:00+09:00'), label: '2025수능' },
         { date: new Date('2024-05-24T00:00:00+09:00'), label: 'Z990S 생일' },
-        { date: new Date('2024-04-10T00:00:00+09:00'), label: '22대 국회의원선거' },
+        { date: new Date('2024-04-01T00:00:00+09:00'), label: '22대 국회의원선거' },
         { date: new Date('2024-05-04T00:00:00+09:00'), label: '세무사1차' },
         { date: new Date('2024-05-05T00:00:00+09:00'), label: 'NEET UG' },
         { date: new Date('2024-05-06T00:00:00+09:00'), label: 'AP 시험' },
@@ -93,25 +93,36 @@
         // 현재 디데이
         var dDay = dDayList[currentIndex];
         
-        // 현재 시간
-        var now = new Date();
-        
-        // 두 날짜 사이의 시간 차이 계산
-        var timeDiff = dDay.date - now;
-        
-        // 남은 일수 계산
-        var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-
         // 디데이 날짜 형식으로 변환
         var dDayDate = dDay.date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
         
-        // 결과 출력
-        var countdown = document.getElementById('countdown');
-        countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
-        setTimeout(function() {
-            countdown.innerHTML = dDay.label + ': <span class="d-day">D-' + days + '</span><br>(' + dDayDate + ')';
-            countdown.style.opacity = 1;
-        }, 500); // 0.5초 후에 텍스트 변경
+        // 현재 시간
+        var now = new Date();
+        
+        // 오늘과 디데이 사이의 시간 차이 계산 (단위: 일)
+        var timeDiff = Math.ceil((dDay.date - now) / (1000 * 60 * 60 * 24));
+        
+        // 오늘인 경우
+        if (timeDiff === 0) {
+            var countdown = document.getElementById('countdown');
+            countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
+            setTimeout(function() {
+                countdown.innerHTML = dDay.label + ': <span class="d-day">화이팅!</span><br><span class="other-text">응원합니다.</span>';
+                countdown.style.opacity = 1;
+            }, 500); // 0.5초 후에 텍스트 변경
+        } else {
+            // 결과 출력
+            var countdown = document.getElementById('countdown');
+            countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
+            setTimeout(function() {
+                if (timeDiff > 0) {
+                    countdown.innerHTML = dDay.label + ': <span class="d-day">D-' + timeDiff + '</span><br>(' + dDayDate + ')';
+                } else {
+                    countdown.innerHTML = dDay.label + ': <span class="d-day">D+' + Math.abs(timeDiff) + '</span><br>(' + dDayDate + ')';
+                }
+                countdown.style.opacity = 1;
+            }, 500); // 0.5초 후에 텍스트 변경
+        }
         
         // 다음 디데이 인덱스로 이동
         currentIndex = (currentIndex + 1) % dDayList.length;
