@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiple D-Day Widget</title>
+<style>
+    @font-face {
+        font-family: 'TheJamsil';
+        font-weight: 700;
+        font-style: normal;
+        src: url('https://cdn.jsdelivr.net/gh/webfontworld/TheJamsil/TheJamsil-Bold.eot');
+        src: url('https://cdn.jsdelivr.net/gh/webfontworld/TheJamsil/TheJamsil-Bold.eot?#iefix') format('embedded-opentype'),
+             url('https://cdn.jsdelivr.net/gh/webfontworld/TheJamsil/TheJamsil-Bold.woff2') format('woff2'),
+             url('https://cdn.jsdelivr.net/gh/webfontworld/TheJamsil/TheJamsil-Bold.woff') format('woff'),
+             url('https://cdn.jsdelivr.net/gh/webfontworld/TheJamsil/TheJamsil-Bold.ttf') format('truetype');
+        font-display: swap;
+    }
+
+    body {
+        font-family: 'TheJamsil', sans-serif; /* 전체 텍스트에 폰트 적용 */
+        background-color: transparent; /* 배경 색상 투명으로 설정 */
+    }
+
+    #countdown {
+        font-size: 24px;
+        text-align: center;
+        margin-top: 50px;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    .d-day {
+        color: rgb(255, 59, 48); /* Apple Red으로 텍스트 색상 설정 */
+    }
+    
+    /* 나머지 텍스트 색상 */
+    .other-text {
+        color: rgb(28, 28, 30); /* 변경할 텍스트 색상 설정 */
+    }
+</style>
+</head>
+<body>
+
+<div id="countdown"></div>
+
+<script>
+    // 디데이 목록 정의
+    var dDayList = [
+        { date: new Date('2024-11-14T00:00:00+09:00'), label: '2025수능' },
+        { date: new Date('2024-05-24T00:00:00+09:00'), label: 'Z990S 생일' },
+        { date: new Date('2024-04-10T00:00:00+09:00'), label: '22대 국회의원선거' },
+        { date: new Date('2024-05-04T00:00:00+09:00'), label: '세무사1차' },
+        { date: new Date('2024-05-05T00:00:00+09:00'), label: 'NEET UG' },
+        { date: new Date('2024-05-06T00:00:00+09:00'), label: 'AP 시험' },
+        { date: new Date('2024-05-08T00:00:00+09:00'), label: '5월 모의고사' },
+        { date: new Date('2024-05-25T00:00:00+09:00'), label: '노무사1차' },
+        { date: new Date('2024-05-26T00:00:00+09:00'), label: 'JEE ADVCD' },
+        { date: new Date('2024-06-04T00:00:00+09:00'), label: '6월 모의고사' },
+        { date: new Date('2024-06-15T00:00:00+09:00'), label: '관세사2차' },
+        { date: new Date('2024-06-22T00:00:00+09:00'), label: '9급지방직' },
+        { date: new Date('2024-06-29T00:00:00+09:00'), label: '해양경찰' },
+        { date: new Date('2024-06-29T00:00:00+09:00'), label: '회계사2차' },
+        { date: new Date('2024-07-07T00:00:00+09:00'), label: 'JLPT' },
+        { date: new Date('2024-07-11T00:00:00+09:00'), label: '7월 모의고사' },
+        { date: new Date('2024-07-13T00:00:00+09:00'), label: '군무원필기' },
+        { date: new Date('2024-07-20T00:00:00+09:00'), label: '계리직' },
+        { date: new Date('2024-07-26T00:00:00+09:00'), label: '변리사2차' },
+        { date: new Date('2024-07-27T00:00:00+09:00'), label: '국가7급1차' },
+        { date: new Date('2024-07-27T00:00:00+09:00'), label: '보험계리2차' },
+        { date: new Date('2024-08-03T00:00:00+09:00'), label: '물류관리사' },
+        { date: new Date('2024-08-03T00:00:00+09:00'), label: '경찰간부필' },
+        { date: new Date('2024-08-17T00:00:00+09:00'), label: '경찰필기2차' },
+        { date: new Date('2024-08-24T00:00:00+09:00'), label: '한자 104회' },
+        { date: new Date('2024-08-30T00:00:00+09:00'), label: '제과기능필기' },
+        { date: new Date('2024-08-31T00:00:00+09:00'), label: '노무사2차' },
+        { date: new Date('2024-08-31T00:00:00+09:00'), label: '법무사1차' },
+        { date: new Date('2024-08-31T00:00:00+09:00'), label: '경찰경력채용' },
+        { date: new Date('2024-10-05T00:00:00+09:00'), label: '행정사2차' },
+        { date: new Date('2024-10-12T00:00:00+09:00'), label: '국가7급2차' },
+        { date: new Date('2024-10-15T00:00:00+09:00'), label: '10월 모의고사' },
+        { date: new Date('2024-10-25T00:00:00+09:00'), label: '공인중개사' },
+        { date: new Date('2024-11-09T00:00:00+09:00'), label: '유초등임용' }
+    ];
+
+    // 디데이 목록을 날짜순으로 정렬
+    dDayList.sort(function(a, b) {
+        return a.date - b.date;
+    });
+
+    var currentIndex = 0;
+
+    function getDday() {
+        // 현재 디데이
+        var dDay = dDayList[currentIndex];
+        
+        // 현재 시간
+        var now = new Date();
+        
+        // 두 날짜 사이의 시간 차이 계산
+        var timeDiff = dDay.date - now;
+        
+        // 남은 일수 계산
+        var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+        // 디데이 날짜 형식으로 변환
+        var dDayDate = dDay.date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        
+        // 결과 출력
+        var countdown = document.getElementById('countdown');
+        countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
+        setTimeout(function() {
+            countdown.innerHTML = dDay.label + ': <span class="d-day">D-' + days + '</span><br>(' + dDayDate + ')';
+            countdown.style.opacity = 1;
+        }, 500); // 0.5초 후에 텍스트 변경
+        
+        // 다음 디데이 인덱스로 이동
+        currentIndex = (currentIndex + 1) % dDayList.length;
+    }
+
+    // 페이지 로드시 디데이 계산
+    window.onload = function() {
+        setInterval(getDday, 4*1000); // N*1초마다 업데이트
+        getDday(); // 초기 업데이트
+    };
+</script>
+
+</body>
+</html>
