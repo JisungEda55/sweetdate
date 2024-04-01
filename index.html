@@ -6,36 +6,30 @@
 <title>Multiple D-Day Widget</title>
 <style>
     @font-face {
-        font-family: 'TheJamsil';
-        font-weight: 800;
+        font-family: 'DNFBitBitv2';
         font-style: normal;
-        src: url('https://cdn.jsdelivr.net/gh/webfontworld/TheJamsil/TheJamsil-ExtraBold.eot');
-        src: url('https://cdn.jsdelivr.net/gh/webfontworld/TheJamsil/TheJamsil-ExtraBold.eot?#iefix') format('embedded-opentype'),
-            url('https://cdn.jsdelivr.net/gh/webfontworld/TheJamsil/TheJamsil-ExtraBold.woff2') format('woff2'),
-            url('https://cdn.jsdelivr.net/gh/webfontworld/TheJamsil/TheJamsil-ExtraBold.woff') format('woff'),
-            url('https://cdn.jsdelivr.net/gh/webfontworld/TheJamsil/TheJamsil-ExtraBold.ttf') format("truetype");
-        font-display: swap;
+        font-weight: 400;
+        src: url('https://cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf') format('opentype');
     }
 
     body {
-        font-family: 'TheJamsil', sans-serif; /* 전체 텍스트에 폰트 적용 */
-        background-color: transparent; /* 배경 색상 투명으로 설정 */
+        font-family: 'DNFBitBitv2', sans-serif;
+        background-color: transparent;
     }
 
     #countdown {
-        font-size: 29px; /* 폰트 사이즈를 5px 크게 설정 */
+        font-size: 29px;
         text-align: center;
         margin-top: 50px;
         transition: opacity 0.5s ease-in-out;
     }
 
     .d-day {
-        color: rgb(255, 59, 48); /* Apple Red으로 텍스트 색상 설정 */
+        color: rgb(255, 59, 48);
     }
     
-    /* 나머지 텍스트 색상 */
     .other-text {
-        color: rgb(28, 28, 30); /* 변경할 텍스트 색상 설정 */
+        color: rgb(28, 28, 30);
     }
 </style>
 </head>
@@ -93,11 +87,11 @@
         // 현재 디데이
         var dDay = dDayList[currentIndex];
         
+        // 현재 시간을 KST로 변환
+        var now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+        
         // 디데이 날짜 형식으로 변환
         var dDayDate = dDay.date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
-        
-        // 현재 시간
-        var now = new Date();
         
         // 오늘과 디데이 사이의 시간 차이 계산 (단위: 일)
         var timeDiff = Math.ceil((dDay.date - now) / (1000 * 60 * 60 * 24));
@@ -107,7 +101,14 @@
             var countdown = document.getElementById('countdown');
             countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
             setTimeout(function() {
-                countdown.innerHTML = dDay.label + ': <span class="d-day">화이팅!</span><br><span class="other-text">응원합니다.</span>';
+                countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">화이팅!</span><br>오늘이 그날!</span>';
+                countdown.style.opacity = 1;
+            }, 500); // 0.5초 후에 텍스트 변경
+        } else if (timeDiff === 1) { // 디데이가 내일일 때
+            var countdown = document.getElementById('countdown');
+            countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
+            setTimeout(function() {
+                countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">내일!</span><br>(' + dDayDate + ')</span>';
                 countdown.style.opacity = 1;
             }, 500); // 0.5초 후에 텍스트 변경
         } else {
@@ -116,9 +117,9 @@
             countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
             setTimeout(function() {
                 if (timeDiff > 0) {
-                    countdown.innerHTML = dDay.label + ': <span class="d-day">D-' + timeDiff + '</span><br>(' + dDayDate + ')';
+                    countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">D-' + timeDiff + '</span><br>(' + dDayDate + ')</span>';
                 } else {
-                    countdown.innerHTML = dDay.label + ': <span class="d-day">D+' + Math.abs(timeDiff) + '</span><br>(' + dDayDate + ')';
+                    countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">D+' + Math.abs(timeDiff) + '</span><br>(' + dDayDate + ')</span>';
                 }
                 countdown.style.opacity = 1;
             }, 500); // 0.5초 후에 텍스트 변경
@@ -130,7 +131,7 @@
 
     // 페이지 로드시 디데이 계산
     window.onload = function() {
-        setInterval(getDday, 4*1000); // N*1초마다 업데이트
+        setInterval(getDday, 5*1000); // N*1초마다 업데이트
         getDday(); // 초기 업데이트
     };
 </script>
