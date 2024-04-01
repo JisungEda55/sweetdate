@@ -31,6 +31,16 @@
     .other-text {
         color: rgb(28, 28, 30);
     }
+
+    img.gif1 {
+        width: 7.5%;
+        height: auto;
+    }
+    
+    img.gif2 {
+        width: 7%;
+        height: auto;
+    }
 </style>
 </head>
 <body>
@@ -38,9 +48,13 @@
 <div id="countdown"></div>
 
 <script>
-    // 디데이 목록 정의
+     // 디데이 목록 정의
     var dDayList = [
         { date: new Date('2024-11-14T00:00:00+09:00'), label: '2025수능' },
+        { date: new Date('2024-04-31T00:00:00+09:00'), label: '일론 머스크' },
+        { date: new Date('2024-04-01T00:00:00+09:00'), label: '테스트 NUN1' },
+        { date: new Date('2024-04-02T00:00:00+09:00'), label: '테스트 NUM2' },
+        { date: new Date('2024-04-03T00:00:00+09:00'), label: '테스트 NUM3' },
         { date: new Date('2024-05-24T00:00:00+09:00'), label: 'Z990S 생일' },
         { date: new Date('2024-04-10T00:00:00+09:00'), label: '22대 국회의원선거' },
         { date: new Date('2024-05-04T00:00:00+09:00'), label: '세무사1차' },
@@ -96,15 +110,15 @@
         // 오늘과 디데이 사이의 시간 차이 계산 (단위: 일)
         var timeDiff = Math.ceil((dDay.date - now) / (1000 * 60 * 60 * 24));
         
-        // 오늘인 경우
+        // 오늘이면
         if (timeDiff === 0) {
             var countdown = document.getElementById('countdown');
             countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
             setTimeout(function() {
-                countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">화이팅!</span><br>오늘이 그날!</span>';
+                countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">화이팅!</span><br><img class="gif1" src="https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_dcd06b30a5c24f6eb871e8f5edbd44f7/default/dark/4.0"></span></span><img class="gif2" src="https://ssl.pstatic.net/static/nng/glive/icon/b_07.gif"></span>';
                 countdown.style.opacity = 1;
             }, 500); // 0.5초 후에 텍스트 변경
-        } else if (timeDiff === 1) { // 디데이가 내일일 때
+        } else if (timeDiff === 1) { // 내일이면
             var countdown = document.getElementById('countdown');
             countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
             setTimeout(function() {
