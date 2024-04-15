@@ -1,57 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Multiple D-Day Widget</title>
-<style>
-    @font-face {
-        font-family: 'DNFBitBitv2';
-        font-style: normal;
-        font-weight: 400;
-        src: url('https://cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf') format('opentype');
-    }
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple D-Day Widget</title>
+    <style>
+        @font-face {
+            font-family: 'DNFBitBitv2';
+            font-style: normal;
+            font-weight: 400;
+            src: url('https://cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf') format('opentype');
+        }
 
-    body {
-        font-family: 'DNFBitBitv2', sans-serif;
-        background-color: transparent;
-    }
+        body {
+            font-family: 'DNFBitBitv2', sans-serif;
+            background-color: transparent;
+        }
 
-    #countdown {
-        font-size: 29px;
-        text-align: center;
-        margin-top: 50px;
-        transition: opacity 0.5s ease-in-out;
-    }
+        #countdown {
+            font-size: 29px;
+            text-align: center;
+            margin-top: 50px;
+            transition: opacity 0.5s ease-in-out;
+        }
 
-    .d-day {
-        color: rgb(255, 59, 48);
-    }
-    
-    .other-text {
-        color: rgb(28, 28, 30);
-    }
+        .d-day {
+            color: rgb(255, 59, 48);
+        }
 
-    img.gif1 {
-        width: 50px;
-        height: 50px;
-    }
-    
-    img.gif2 {
-        width: 50px;
-        height: 42px;
-    }
-</style>
+        .other-text {
+            color: rgb(28, 28, 30);
+        }
+
+        img.gif1 {
+            width: 50px;
+            height: 50px;
+        }
+
+        img.gif2 {
+            width: 50px;
+            height: 42px;
+        }
+    </style>
 </head>
+
 <body>
 
-<div id="countdown"></div>
+    <div id="countdown"></div>
 
-<script>
-     // 디데이 목록 정의
+    <script>
+        // 디데이 목록 정의
     var dDayList = [
         { date: new Date('2024-11-14T00:00:00+09:00'), label: '2025수능' },
         { date: new Date('2024-05-24T00:00:00+09:00'), label: 'Z990S 생일' },
+        { date: new Date('2024-04-15T00:00:00+09:00'), label: '어제를 시험하자!' },
+        { date: new Date('2024-04-16T00:00:00+09:00'), label: '오늘을 시험하자!' },
+        { date: new Date('2024-04-17T00:00:00+09:00'), label: '내일을 시험하자!' },
+        { date: new Date('2024-04-10T00:00:00+09:00'), label:
+'국회의원선거' },
         { date: new Date('2024-05-04T00:00:00+09:00'), label: '세무사1차' },
         { date: new Date('2024-05-05T00:00:00+09:00'), label: 'NEET UG' },
         { date: new Date('2024-05-06T00:00:00+09:00'), label: 'AP 시험' },
@@ -85,65 +93,67 @@
         { date: new Date('2024-11-09T00:00:00+09:00'), label: '유초등임용' }
     ];
 
-    // 디데이 목록을 날짜순으로 정렬
-    dDayList.sort(function(a, b) {
-        return a.date - b.date;
-    });
+        // 디데이 목록을 날짜순으로 정렬
+        dDayList.sort(function (a, b) {
+            return a.date - b.date;
+        });
 
-    var currentIndex = 0;
+        var currentIndex = 0;
 
-    function getDday() {
-        // 현재 디데이
-        var dDay = dDayList[currentIndex];
-        
-        // 현재 시간을 KST로 변환
-        var now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
-        
-        // 디데이 날짜 형식으로 변환
-        var dDayDate = dDay.date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
-        
-        // 오늘과 디데이 사이의 시간 차이 계산 (단위: 일)
-        var timeDiff = Math.ceil((dDay.date - now) / (1000 * 60 * 60 * 24));
-        
-        // 오늘이면
-        if (timeDiff === 0) {
+        // 디데이 표시
+        function getDday() {
+            // 현재 디데이 인덱스에 따라 디데이 설정
+            var dDay = dDayList[currentIndex];
+
+            // 현재 시간을 KST로 변환
+            var now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+
+            // 디데이 날짜 형식 변환
+            var dDayDate = dDay.date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+            // 현재 시간과 디데이 시간 차이 계산 (단위: 일)
+            var timeDiff = Math.ceil((dDay.date - now) / (1000 * 60 * 60 * 24));
+
+            // 현재 인덱스가 가리키는 디데이가 지나간 경우 건너뛰도록 루프
+            while (timeDiff < 0) {
+                currentIndex++;
+                if (currentIndex >= dDayList.length) {
+                    return; // 디데이 목록의 끝에 도달했을 때 종료
+                }
+                dDay = dDayList[currentIndex];
+                timeDiff = Math.ceil((dDay.date - now) / (1000 * 60 * 60 * 24));
+            }
+
+            // 디데이 출력
             var countdown = document.getElementById('countdown');
             countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
-            setTimeout(function() {
-                countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">화이팅!</span><br><img class="gif1" src="https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_dcd06b30a5c24f6eb871e8f5edbd44f7/default/dark/4.0"></span></span><img class="gif2" src="https://ssl.pstatic.net/static/nng/glive/icon/b_07.gif"></span>';
-                countdown.style.opacity = 1;
-            }, 500); // 0.5초 후에 텍스트 변경
-        } else if (timeDiff === 1) { // 내일이면
-            var countdown = document.getElementById('countdown');
-            countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
-            setTimeout(function() {
-                countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">내일!</span><br>(' + dDayDate + ')</span>';
-                countdown.style.opacity = 1;
-            }, 500); // 0.5초 후에 텍스트 변경
-        } else {
-            // 결과 출력
-            var countdown = document.getElementById('countdown');
-            countdown.style.opacity = 0; // 텍스트가 부드럽게 전환되도록 opacity를 0으로 설정
-            setTimeout(function() {
-                if (timeDiff > 0) {
-                    countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">D-' + timeDiff + '</span><br>(' + dDayDate + ')</span>';
+            setTimeout(function () {
+                if (timeDiff === 0) {
+                    // 오늘이면
+                    countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">화이팅!</span><br><img class="gif1" src="https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_dcd06b30a5c24f6eb871e8f5edbd44f7/default/dark/4.0"></span></span><img class="gif2" src="https://ssl.pstatic.net/static/nng/glive/icon/b_07.gif"></span>';
+                } else if (timeDiff === 1) {
+                    // 내일이면
+                    countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">내일!</span><br>(' + dDayDate + ')</span>';
                 } else {
-                    countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">D+' + Math.abs(timeDiff) + '</span><br>(' + dDayDate + ')</span>';
+                    // D-day 카운트다운
+                    countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">D-' + timeDiff + '</span><br>(' + dDayDate + ')</span>';
                 }
                 countdown.style.opacity = 1;
             }, 500); // 0.5초 후에 텍스트 변경
+            
+            // 다음 디데이로 이동
+            currentIndex++;
+            if (currentIndex >= dDayList.length) {
+                currentIndex = 0;
+            }
         }
-        
-        // 다음 디데이 인덱스로 이동
-        currentIndex = (currentIndex + 1) % dDayList.length;
-    }
 
-    // 페이지 로드시 디데이 계산
-    window.onload = function() {
-        setInterval(getDday, 5*1000); // N*1초마다 업데이트
-        getDday(); // 초기 업데이트
-    };
-</script>
-
+        // 페이지 로드시 디데이 계산
+        window.onload = function () {
+            setInterval(getDday, 5000); // 5초마다 업데이트
+            getDday(); // 초기 업데이트
+        };
+    </script>
 </body>
+
 </html>
