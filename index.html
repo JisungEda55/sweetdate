@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<html>
+<head>
+<title>Online HTML Editor</title<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,17 +11,18 @@
     <title>Multiple D-Day Widget</title>
     <style>
         @font-face {
-            font-family: 'DNFBitBitv2';
+            font-family: 'Giants-Bold';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/Giants-Bold.woff2') format('woff2');
+            font-weight: 700;
             font-style: normal;
-            font-weight: 400;
-            src: url('https://cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf') format('opentype');
         }
 
         body {
-            font-family: 'DNFBitBitv2', sans-serif;
+            font-family: 'Giants-Bold', sans-serif; /* 변경된 폰트 적용 */
             background-color: transparent;
         }
 
+        /* 기존의 다른 스타일 규칙들은 그대로 유지 */
         #countdown {
             font-size: 29px;
             text-align: center;
@@ -28,6 +32,7 @@
 
         .d-day {
             color: rgb(255, 59, 48);
+            font-size: 39px;
         }
 
         .other-text {
@@ -130,13 +135,13 @@
             setTimeout(function () {
                 if (timeDiff === 0) {
                     // 오늘이면
-                    countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">화이팅!</span><br><img class="gif1" src="https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_dcd06b30a5c24f6eb871e8f5edbd44f7/default/dark/4.0"></span></span><img class="gif2" src="https://ssl.pstatic.net/static/nng/glive/icon/b_07.gif"></span>';
+                    countdown.innerHTML = '<span class="other-text">' + dDay.label + '<br><span class="d-day">D-0</span><br>(' + dDayDate + ')</span>';
                 } else if (timeDiff === 1) {
                     // 내일이면
-                    countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">내일!</span><br>(' + dDayDate + ')</span>';
+                    countdown.innerHTML = '<span class="other-text">' + dDay.label + '<br><span class="d-day">D-1</span><br>(' + dDayDate + ')</span>';
                 } else {
                     // D-day 카운트다운
-                    countdown.innerHTML = '<span class="other-text">' + dDay.label + ': <span class="d-day">D-' + timeDiff + '</span><br>(' + dDayDate + ')</span>';
+                    countdown.innerHTML = '<span class="other-text">' + dDay.label + '<br><span class="d-day">D-' + timeDiff + '</span><br>(' + dDayDate + ')</span>';
                 }
                 countdown.style.opacity = 1;
             }, 500); // 0.5초 후에 텍스트 변경
@@ -154,6 +159,7 @@
             getDday(); // 초기 업데이트
         };
     </script>
+
 </body>
 
 </html>
